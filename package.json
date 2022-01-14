@@ -1,0 +1,14 @@
+{
+  "name": "minimum-viable-checkout-sdk",
+  "version": "1.0.0",
+  "description": "A full BigCommerce Checkout SDK implementation using the bare minimum amount of Javascript code",
+  "main": "server.js",
+  "scripts": {
+    "start": "http-server"
+  },
+  "author": "Matthew Volk",
+  "license": "ISC",
+  "devDependencies": {
+    "http-server": "^14.1.0"
+  }
+}
