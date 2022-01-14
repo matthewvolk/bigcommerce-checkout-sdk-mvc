@@ -9,11 +9,9 @@ of Javascript code required to do so.
 1. Clone this repository
 2. Install dependencies: `npm install`
 3. Run the server: `npm start`
-4. Navigate to your BigCommerce Control Panel > Advanced Settings > Checkout, change "Checkout Type"
-   to "Custom Checkout", scroll down to "Custom Checkout Settings", and enter
-   `http://127.0.0.1:8080/checkout.js` in the "Script URL:" input field.
-5. Navigate to your storefront, add a product to your cart, open your browser's Javascript console,
-   and navigate to Checkout.
+4. Follow the instructions in your terminal to serve Checkout SDK from your BigCommerce Store
+5. Edit `src/checkout.js` as needed, refreshing your checkout session in your browser as you make
+   and save changes
 
 # Why?
 
