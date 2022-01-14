@@ -1,20 +1,14 @@
 /**
  * First, we'll use the document.createElement() method to create an
- * HTML <script> element, and store it into a variable.
- *
- * More information:
- * https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
- */
-var checkoutScriptElement = document.createElement('script');
-
-/**
- * We'll then add a "src" property to the <script> element that we
- * created and stored in the variable above.
+ * HTML <script> element, and store it into a variable. We'll then add
+ * a "src" property to the <script> element that we created and stored
+ * in the variable above.
  *
  * After this step, the variable "checkoutScriptElement" would look
  * something like:
  * <script src="https://checkout-sdk.bigcommerce.com/v1/loader.js" />
  */
+const checkoutScriptElement = document.createElement('script');
 checkoutScriptElement.src = 'https://checkout-sdk.bigcommerce.com/v1/loader.js';
 
 /**
@@ -42,26 +36,27 @@ document.head.appendChild(checkoutScriptElement);
  */
 checkoutScriptElement.onload = async function () {
   /**
-   * The Checkout SDK CDN makes the checkoutKitLoader module available in the
-   * global browser context.
+   * These first few steps are setup + configuration. The Checkout SDK CDN
+   * makes the checkoutKitLoader module available in the global browser
+   * context. Here, we create the BigCommerce Checkout SDK Service and
+   * store it in a variable called "service".
    *
    * More information:
    * https://github.com/bigcommerce/checkout-sdk-js#using-cdn-url
    */
   const module = await checkoutKitLoader.load('checkout-sdk');
-
-  /**
-   * Here, we create the BigCommerce Checkout SDK Service.
-   */
   const service = module.createCheckoutService();
 
   /**
-   * This step is very important. How does Checkout SDK know which checkout to load? How
-   * does it know what products are in your cart?
+   * This step is very important. How does Checkout SDK know which checkout to
+   * load? How does it know what products are in your cart?
    *
-   * BigCommerce creates a variable in each checkout window containing the ID of the
-   * current checkout. We retrieve the Checkout ID from this variable, and give it
-   * to the Checkout SDK Service's "loadCheckout()" method.
+   * BigCommerce creates a variable in each checkout window containing the ID of
+   * the current checkout. We retrieve the Checkout ID from this variable, and
+   * give it to the Checkout SDK Service's "loadCheckout()" method. After this
+   * step, the "state" variable contains the state of our Checkout ID (e.g.,
+   * who is checking out, their shipping information, their billing information,
+   * etc.)
    *
    * For more information, see section "Properties available on the checkout page":
    * https://developer.bigcommerce.com/stencil-docs/customizing-checkout/installing-custom-checkouts#obtaining-the-javascript-loader-file
@@ -69,6 +64,10 @@ checkoutScriptElement.onload = async function () {
   let state = await service.loadCheckout(window.checkoutConfig.checkoutId);
 
   /**
+   * ====================================
+   * CHECKOUT STEP 1: CUSTOMER
+   * ====================================
+   *
    * For example purposes, we continue through checkout as a guest. But in a real
    * scenario, you would prompt the customer to log in with their account at this point.
    *
@@ -92,6 +91,10 @@ checkoutScriptElement.onload = async function () {
   console.log('Current Customer Checking Out:', state.data.getCustomer());
 
   /**
+   * ====================================
+   * CHECKOUT STEP 2: SHIPPING
+   * ====================================
+   *
    * The "getShippingAddressFields()" method retrieves the available Shipping Address
    * Fields (including custom Address Form Fields) specific to your BigCommerce Store.
    * These can be found and modified in Advanced Settings > Account Signup Form >
@@ -106,8 +109,9 @@ checkoutScriptElement.onload = async function () {
   console.log('Shipping Address Fields:', shippingInputFields);
 
   /**
-   * This object mimics the act of the customer entering their shipping information
+   * This object mimics the act of the customer entering their shipping information.
    * In a real scenario, each of the values below would be retrieved from user input
+   * into each of the shippingInputFields from above.
    */
   const address = {
     firstName: 'Test',
@@ -122,27 +126,30 @@ checkoutScriptElement.onload = async function () {
   };
 
   /**
-   * This updates the Checkout SDK state with the address above
+   * We then pass the address object created above to the Checkout SDK's
+   * 'updateShippingAddress' method to update the Checkout with the customer's
+   * shipping information.
    */
   state = await service.updateShippingAddress(address);
 
   /**
-   * Checkout SDK now has the user's Shipping Address in memory
+   * Here we're just logging out the shipping address that we saved above.
    */
-  console.log('Test Shipping Address:', state.data.getShippingAddress());
+  console.log('Shipping Address:', state.data.getShippingAddress());
 
   /**
    * Depending on the Shipping Address above and your store's shipping settings,
    * use the getShippingOptions method below to retrieve available shipping methods for
-   * the user to choose from
+   * the user to choose from.
+   *
+   * The shipping method options returned are configured in "Store Setup" > "Shipping"
    */
   const shippingOptions = state.data.getShippingOptions();
-  console.log('Customer Available Shipping Options:', shippingOptions);
+  console.log('Available Shipping Method Options:', shippingOptions);
 
   /**
-   * In this example, I just select the first available shipping method
-   * (in my store, it's "free shipping")
-   * In a real scenario, you would retrieve this from user input
+   * In this example, I just select the first available shipping method (in my store,
+   * it's "free shipping"). In a real scenario, you would retrieve this from user input.
    */
   state = await service.selectShippingOption(shippingOptions[0].id);
 
@@ -152,41 +159,46 @@ checkoutScriptElement.onload = async function () {
   console.log('Selected Shipping Option:', state.data.getSelectedShippingOption());
 
   /**
-   * Update Checkout Billing Address with the same address above
-   * In a real scenario, you would retrieve this from user input
+   * ====================================
+   * CHECKOUT STEP 3: BILLING
+   * ====================================
+   *
+   * Update Checkout Billing Address with the same address above. In a real scenario,
+   * you would retrieve this from user input.
    */
   state = await service.updateBillingAddress(address);
 
   /**
-   * You can see now that Checkout SDK knows:
+   * ====================================
+   * CHECKOUT STEP 4: PAYMENT
+   * ====================================
+   *
+   * At this point, Checkout SDK is now aware of:
    * 1. Who is checking out (the customer)
    * 2. Where the order is being shipped (the shipping address)
    * 3. Who to bill for the order (the billing address)
-   */
-  console.log('Customer State:', state.data.getCustomer());
-  console.log('Shipping State:', state.data.getShippingAddress());
-  console.log('Billing State:', state.data.getBillingAddress());
-
-  /**
-   * Load your store's available payment methods. Mine just loads the native Test Payment Gateway
+   *
+   * Next, we load your store's available payment methods. The available payment method
+   * options returned here are configued in "Store Setup" > "Payments".
    */
   state = await service.loadPaymentMethods();
 
   /**
-   * In a real scenario, you would render each payment method option to the user so they
-   * can select how they'd like to pay.
+   * Here we log the available payment methods that a customer can choose from. In a real
+   * scenario, you would render each payment method option to the user so they can select
+   * how they'd like to pay.
    */
   console.log('Payment Methods:', state.data.getPaymentMethods());
 
   /**
-   * Select the payment method to be used for the order
-   * In a real scenario, you would retrieve this from user input
+   * Here, we initialize the payment method to be used for the order. In a real scenario,
+   * this would be done after the customer selects their desired payment method.
    */
   await service.initializePayment({methodId: 'testgateway'});
 
   /**
-   * Payment details (credit card) to be used for the order
-   * In a real scenario, you would retrieve this from user input
+   * Payment details (credit card) to be used for the order. In a real scenario, you would
+   * retrieve this from user input
    */
   const payment = {
     methodId: 'testgateway',
@@ -200,8 +212,10 @@ checkoutScriptElement.onload = async function () {
   };
 
   /**
-   * Uncomment the lines below if you'd like to actually place the order
-   * and redirect to the Order Confirmation Page
+   * Finally, we go ahead and pay for the order using the information we've collcted above.
+   *
+   * Uncomment the three lines below if you'd like to actually place the order and redirect
+   * to the Order Confirmation Page.
    */
 
   // state = await service.submitOrder({payment});
