@@ -88,7 +88,8 @@ checkoutScriptElement.onload = async function () {
    *
    * This should return a Customer object with ID: 0, since the customer is a guest
    */
-  console.log('Current Customer Checking Out:', state.data.getCustomer());
+  const yellowText = 'background-color: yellow; color: black; font-weight: bold;';
+  console.log('%cCurrent Customer Checking Out:', yellowText, state.data.getCustomer());
 
   /**
    * ====================================
@@ -106,7 +107,7 @@ checkoutScriptElement.onload = async function () {
    * Here, we're just logging each of the shipping address fields to the Javascript
    * console.
    */
-  console.log('Shipping Address Fields:', shippingInputFields);
+  console.log('%cShipping Address Fields:', yellowText, shippingInputFields);
 
   /**
    * This object mimics the act of the customer entering their shipping information.
@@ -135,7 +136,7 @@ checkoutScriptElement.onload = async function () {
   /**
    * Here we're just logging out the shipping address that we saved above.
    */
-  console.log('Shipping Address:', state.data.getShippingAddress());
+  console.log('%cShipping Address:', yellowText, state.data.getShippingAddress());
 
   /**
    * Depending on the Shipping Address above and your store's shipping settings,
@@ -145,7 +146,7 @@ checkoutScriptElement.onload = async function () {
    * The shipping method options returned are configured in "Store Setup" > "Shipping"
    */
   const shippingOptions = state.data.getShippingOptions();
-  console.log('Available Shipping Method Options:', shippingOptions);
+  console.log('%cAvailable Shipping Method Options:', yellowText, shippingOptions);
 
   /**
    * In this example, I just select the first available shipping method (in my store,
@@ -156,7 +157,7 @@ checkoutScriptElement.onload = async function () {
   /**
    * Checkout SDK now has the user's selected Shipping Method in memory
    */
-  console.log('Selected Shipping Option:', state.data.getSelectedShippingOption());
+  console.log('%cSelected Shipping Option:', yellowText, state.data.getSelectedShippingOption());
 
   /**
    * ====================================
@@ -188,7 +189,7 @@ checkoutScriptElement.onload = async function () {
    * scenario, you would render each payment method option to the user so they can select
    * how they'd like to pay.
    */
-  console.log('Payment Methods:', state.data.getPaymentMethods());
+  console.log('%cPayment Methods:', yellowText, state.data.getPaymentMethods());
 
   /**
    * Here, we initialize the payment method to be used for the order. In a real scenario,
