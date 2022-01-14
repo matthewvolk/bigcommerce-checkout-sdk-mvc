@@ -223,3 +223,16 @@ checkoutScriptElement.onload = async function () {
   // console.log(state.data.getOrder());
   // window.location.assign('/order-confirmation');
 };
+
+/**
+ * Disregard the code below. All this does is print information to the checkout to instruct
+ * you to open your Javascript console to see what Checkout SDK is doing during your
+ * checkout session.
+ */
+const infoHeading = document.createElement('h1');
+infoHeading.innerText = "Don't forget to open your Javascript Console";
+infoHeading.style.color = 'red';
+infoHeading.style.fontWeight = 'bold';
+infoHeading.style.textAlign = 'center';
+infoHeading.style.margin = '2em';
+document.querySelector('body').appendChild(infoHeading);
