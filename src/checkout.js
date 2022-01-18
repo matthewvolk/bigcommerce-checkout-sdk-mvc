@@ -231,7 +231,7 @@ checkoutScriptElement.onload = async function () {
  * checkout session.
  */
 const infoHeading = document.createElement('h1');
-infoHeading.innerText = "Don't forget to open your Javascript Console";
+infoHeading.innerText = "Open your Javascript Console to view Checkout SDK Logic";
 infoHeading.style.color = 'red';
 infoHeading.style.fontWeight = 'bold';
 infoHeading.style.textAlign = 'center';
