@@ -88,7 +88,7 @@ checkoutScriptElement.onload = async function () {
    *
    * This should return a Customer object with ID: 0, since the customer is a guest
    */
-  const yellowText = 'background-color: yellow; color: black; font-weight: bold;';
+  const yellowText = 'background-color: yellow; color: black; font-weight: bold; padding: 0.1rem;';
   console.log('%cCurrent Customer Checking Out:', yellowText, state.data.getCustomer());
 
   /**
@@ -215,10 +215,11 @@ checkoutScriptElement.onload = async function () {
   /**
    * Finally, we go ahead and pay for the order using the information we've collcted above.
    *
-   * Uncomment the three lines below if you'd like to actually place the order and redirect
+   * Uncomment the four lines below if you'd like to actually place the order and redirect
    * to the Order Confirmation Page.
    */
 
+  // console.log("%cSubmitting Payment...", "background-color: lawngreen; color: black; font-weight: bold; padding: 0.1rem;")
   // state = await service.submitOrder({payment});
   // console.log(state.data.getOrder());
   // window.location.assign('/order-confirmation');
