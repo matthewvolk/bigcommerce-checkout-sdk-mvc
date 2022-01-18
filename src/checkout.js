@@ -194,6 +194,9 @@ checkoutScriptElement.onload = async function () {
   /**
    * Here, we initialize the payment method to be used for the order. In a real scenario,
    * this would be done after the customer selects their desired payment method.
+   * 
+   * IMPORTANT: Ensure the BigCommerce default Test Payment Gateway is enabled otherwise
+   * an error will be thrown.
    */
   await service.initializePayment({methodId: 'testgateway'});
 
