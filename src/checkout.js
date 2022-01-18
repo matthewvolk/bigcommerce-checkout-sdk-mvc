@@ -61,7 +61,7 @@ checkoutScriptElement.onload = async function () {
    * For more information, see section "Properties available on the checkout page":
    * https://developer.bigcommerce.com/stencil-docs/customizing-checkout/installing-custom-checkouts#obtaining-the-javascript-loader-file
    */
-  let state = await service.loadCheckout(window.checkoutConfig.checkoutId);
+  let state = await service.loadCheckout();
 
   /**
    * ====================================
